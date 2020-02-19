@@ -8,6 +8,7 @@ const helmet = require('helmet');
 const client = new MongoClient(CONFIG.DB_URL, { useUnifiedTopology: true });
 const moment = require('moment');
 const api = require('./api');
+const cors = require('cors')
 
 
 const ENUM_PROCESS_STATUS = {
@@ -69,10 +70,32 @@ router.get(/^\/stores\/((?:[0-8]\d|9[0-8])\d{3})$/, async (req, res) => {
     if (docs && moment().diff(moment(docs.lastUpdate, 'x'), 'minutes') < CONFIG.STORES_UPDATE_MIN) {
 
       processAssertDestroyed(postal, locale);
+      
+      const stores = docs.stores;
+
+      try {
+
+        const locationCollection = client.db().collection(CONFIG.DB_LOCATIONS_COLLECTION);
+
+        const storesIds = stores.map(s => s.id);
+
+        const foundLocationsCursor = await locationCollection.find({ storeId: { $in: storesIds } });
+
+        await foundLocationsCursor.forEach(doc => {
+         
+          if (!doc.location || moment().diff(moment(doc.lastUpdate, 'x'), 'days') > CONFIG.LOCATIONS_UPDATE_DAYS) return;
+          
+          for (let i=0; i<stores.length; i++) {
+            if (stores[i].id === doc.storeId)
+              stores[i].location = doc.location;
+          }
+        });
+
+      } catch(lerr) {}
 
       return res.json({
         success: true,
-        data: { status: "finished", stores: docs.stores, age: moment().diff(moment(docs.lastUpdate, 'x'), 'minutes') }
+        data: { status: "finished", stores: Array.from(new Set(stores)), age: moment().diff(moment(docs.lastUpdate, 'x'), 'minutes') }
       });
     }
 
@@ -118,7 +141,7 @@ function processAssertDestroyed(postal, locale) {
 }
 
 function locationProcessAssertDestroyed(storeId) {
-  process_stores = process_stores.filter(x => x.storeId !== storeId);
+  process_locations = process_stores.filter(x => x.storeId !== storeId);
 }
 
 async function process(locale, collectionName, postal){
@@ -161,6 +184,12 @@ async function process(locale, collectionName, postal){
     });
   } catch(err) {
     console.error(`> catched mapping error @getStores(${locale}, ${postal})`);
+    processAssertDestroyed(postal, locale);
+    return;
+  }
+
+  if (stores.length === 0) {
+    console.error(`> catched validation error @getStores(${locale}, ${postal})`);
     processAssertDestroyed(postal, locale);
     return;
   }
@@ -307,6 +336,7 @@ router.get(/^\/locate\/([0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA
 });
 
 app.use(helmet());
+app.use(cors());
 app.use('/api', router);
 
 client.connect((err) => {

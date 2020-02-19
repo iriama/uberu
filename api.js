@@ -240,7 +240,7 @@ async function getStores(locale, location_str, delay=0) {
         await sleep(delay);
     } while(meta.hasMore);
 
-    return stores;
+    return Array.from(new Set(stores));
 }
 
 async function getStoreAddress(locale, storeUuid) {
