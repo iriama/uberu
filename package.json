@@ -1,5 +1,5 @@
 {
-  "name": "uberu-server",
+  "name": "uberu",
   "version": "0.0.1",
   "description": "",
   "main": "api.js",
