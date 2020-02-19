@@ -337,6 +337,7 @@ router.get(/^\/locate\/([0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA
 
 app.use(helmet());
 app.use(cors());
+app.use(express.static('public'));
 app.use('/api', router);
 
 client.connect((err) => {
