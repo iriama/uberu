@@ -1,0 +1,27 @@
+{
+  "name": "uberu-server",
+  "version": "0.0.1",
+  "description": "",
+  "main": "api.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "helmet": "^3.21.2",
+    "moment": "^2.24.0",
+    "mongodb": "^3.5.3",
+    "request": "^2.88.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iriama/uberu-server.git"
+  },
+  "author": {
+    "name": "iriama",
+    "email": "iriama@protonmail.com",
+    "url": "https://github.com/iriama"
+  },
+  "license": "MIT"
+}

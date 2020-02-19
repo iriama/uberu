@@ -1,0 +1,9 @@
+{
+    "PORT": 3000,
+    "DEFAULT_LOCALE": "en-GB",
+    "DB_URL": "mongodb://{username}:{password}@{host}:{port}/{database}>",
+    "DB_STORES_COLLECTION_PREFIX": "stores",
+    "STORES_UPDATE_MIN": 30,
+    "DB_LOCATIONS_COLLECTION": "locations",
+    "LOCATIONS_UPDATE_DAYS": 180
+}
