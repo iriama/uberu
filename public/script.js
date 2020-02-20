@@ -1,4 +1,4 @@
-const API_HOST = "/api";
+var API_HOST = "/api";
 
 feather.replace();
 
@@ -78,12 +78,12 @@ function setStatus(main, sub) {
 }
 
 
-let stores = [];
-let age = 0;
+var stores = [];
+var age = 0;
 
 function submit(nbPoints=-1) {
 
-    const zip = document.getElementById("zip").value;
+    var zip = document.getElementById("zip").value;
 
     if (current_position && current_accuracy && current_zip && zip !== current_zip) {
         map.removeLayer(current_position);
@@ -99,7 +99,7 @@ function submit(nbPoints=-1) {
 
     setStatus("fetching data" + (nbPoints > 0 ? ".".repeat(nbPoints) : ""), (nbPoints > 0 ? "(this may take few minutes)" : ""));
     
-    const locale = navigator.language || navigator.userLanguage;
+    var locale = navigator.language || navigator.userLanguage;
     
     showOverlay();
 
@@ -120,7 +120,7 @@ function submit(nbPoints=-1) {
 
 }
 
-let finished = [];
+var finished = [];
 
 async function fetchLocations() {
 
@@ -154,12 +154,12 @@ async function fetchLocations() {
         } catch(e) { continue; }
     }
 
-    const ms = Math.min(10000, Math.max(2000, missing.length * 100));
-    let sec = Math.ceil(ms/1000);
+    var ms = Math.min(10000, Math.max(2000, missing.length * 100));
+    var sec = Math.ceil(ms/1000);
 
     setStatus("please wait...", `${Math.ceil(ms/1000)} seconds left`);
 
-    const iid = setInterval(() => {
+    var iid = setInterval(() => {
         sec -= 1;
         setStatus("please wait...", `${sec} second${sec > 1 ? "s" : ""} left`);
     }, 1000);
@@ -217,20 +217,20 @@ function renderPoints() {
     if (!current_position)
         map.setView([stores[0].location.latitude, stores[0].location.longitude], 14);
     
-    const promo = stores.find(s => s.promotion);
+    var promo = stores.find(s => s.promotion);
 
-    for (let store of stores) {
+    for (var store of stores) {
 
-        const score = Math.min(1, (store.count + store.stars * 5)/225);
-        const color = store.open ? getColorForPercentage(score) : "#747474";
+        var score = Math.min(1, (store.count + store.stars * 5)/225);
+        var color = store.open ? getColorForPercentage(score) : "#747474";
 
         if (!store.location) continue;
 
-        const latlng = {lat: store.location.latitude, lng: store.location.longitude};
+        var latlng = {lat: store.location.latitude, lng: store.location.longitude};
 
-        let popupHtml = `<h5>${store.name}</h5><p>${store.location.address}</p><p>`
+        var popupHtml = `<h5>${store.name}</h5><p>${store.location.address}</p><p>`
 
-        for (let i = 0; i<store.categories.length; i++) {
+        for (var i = 0; i<store.categories.length; i++) {
             var cat = store.categories[i];
             popupHtml += cat + (i+1 < store.categories.length ? " - " : "");
         }
