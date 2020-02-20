@@ -220,18 +220,16 @@ function rgbToHex(rgb) {
 
 function renderPoints() {
 
+    let stores = stores.sort((a, b) => {
+        var scoreA = a.count + a.stars * 5;
+        var scoreB = b.count + a.stars * 5;
+
+        return scoreB - scoreA;
+    });
 
     if (!current_position) {
-        var chosen = stores.sort((a, b) => {
-            var scoreA = a.count + a.stars * 5;
-            var scoreB = b.count + a.stars * 5;
-
-            return scoreB - scoreA;
-        })[0];
-        map.setView([chosen.location.latitude, chosen.location.longitude], 14);
+        map.setView([stores[0].location.latitude, stores[0].location.longitude], 14);
     }
-    
-    var promo = stores.find(s => s.promotion);
 
     for (var store of stores) {
 
