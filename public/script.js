@@ -220,15 +220,15 @@ function rgbToHex(rgb) {
 
 function renderPoints() {
 
-    let stores = stores.sort((a, b) => {
+    stores = stores.sort((a, b) => {
         var scoreA = a.count + a.stars * 5;
         var scoreB = b.count + a.stars * 5;
 
-        return scoreB - scoreA;
+        return scoreA - scoreB;
     });
 
     if (!current_position) {
-        map.setView([stores[0].location.latitude, stores[0].location.longitude], 14);
+        map.setView([stores[stores.length - 1].location.latitude, stores[stores.length - 1].location.longitude], 14);
     }
 
     for (var store of stores) {
