@@ -67,7 +67,8 @@ router.get(/^\/stores\/((?:[0-8]\d|9[0-8])\d{3})$/, async (req, res) => {
 
     const docs = await collection.findOne({ postal });
 
-    if (docs && moment().diff(moment(docs.lastUpdate, 'x'), 'minutes') < CONFIG.STORES_UPDATE_MIN) {
+    const lim = docs && docs.stores && docs.stores.length === 0 ? 5 : CONFIG.STORES_UPDATE_MIN;
+    if (docs && moment().diff(moment(docs.lastUpdate, 'x'), 'minutes') < lim) {
 
       processAssertDestroyed(postal, locale);
       
@@ -188,11 +189,11 @@ async function process(locale, collectionName, postal){
     return;
   }
 
-  if (stores.length === 0) {
+  /*if (stores.length === 0) {
     console.error(`> catched validation error @getStores(${locale}, ${postal})`);
     setTimeout(() => processAssertDestroyed(postal, locale), 30000);
     return;
-  }
+  }*/
   
   try {
     const collection = client.db().collection(collectionName);

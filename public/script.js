@@ -113,6 +113,13 @@ function submit(nbPoints=-1) {
             }
 
             stores = json.data.stores;
+
+            if (!stores || !stores.length) {
+                hideOverlay();
+                alert("no nearby stores are open at the current time, please check again later");
+                return;
+            }
+
             age = json.data.age;
             console.log(stores);
             fetchLocations();
