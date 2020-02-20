@@ -190,7 +190,7 @@ async function process(locale, collectionName, postal){
 
   if (stores.length === 0) {
     console.error(`> catched validation error @getStores(${locale}, ${postal})`);
-    processAssertDestroyed(postal, locale);
+    setTimeout(() => processAssertDestroyed(postal, locale), 30000);
     return;
   }
   
